@@ -1,0 +1,28 @@
+{
+  "name": "rootwork/rootwork-reports",
+  "version": "dev-develop",
+  "description": "A time-saving PHP reporting framework.",
+  "license": "MIT",
+  "keywords": [
+    "rootwork",
+    "php",
+    "reports"
+  ],
+  "homepage": "https://github.com/mikesoule/rootwork-reports",
+  "authors": [
+    {
+      "name": "Mike Soule",
+      "email": "mike@rootwork.it"
+    }
+  ],
+  "require": {
+    "php": ">=5.4"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Rootwork\\Report\\": "src/Report/"
+    }
+  }
+}
