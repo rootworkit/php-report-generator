@@ -201,6 +201,24 @@ class Definition
     }
 
     /**
+     * Get a report instance from the definition.
+     *
+     * @param array|null $args
+     *
+     * @return ReportInterface
+     */
+    public function getReport(array $args = null)
+    {
+        $class = $this->getClass();
+
+        if ($args) {
+            return new $class(...$args);
+        }
+
+        return new $class();
+    }
+
+    /**
      * @return Variable[]
      */
     public function getVariables()

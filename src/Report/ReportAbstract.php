@@ -12,11 +12,11 @@
 namespace Rootwork\Report;
 
 /**
- * Basic report class
+ * Basic report abstract class
  *
  * @package Rootwork\Report
  */
-class Report
+abstract class ReportAbstract
 {
-
+    abstract public function run(array $variables = []);
 }
