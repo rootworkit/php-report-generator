@@ -22,11 +22,11 @@ class Variable
     /**
      * Type constants
      */
-    const TYPE_DATE = 'date';
-    const TYPE_NUMBER = 'number';
-    const TYPE_SELECT = 'select';
+    const TYPE_DATE            = 'date';
+    const TYPE_NUMBER          = 'number';
+    const TYPE_SELECT          = 'select';
     const TYPE_SELECT_MULTIPLE = 'select-multiple';
-    const TYPE_TEXT = 'text';
+    const TYPE_TEXT            = 'text';
 
     /**
      * The variable name.
@@ -64,11 +64,18 @@ class Variable
     protected $default;
 
     /**
-     * Default to all selected for variables with multiple values.
+     * Optional formatting string.
      *
-     * @var bool
+     * @var string
      */
-    protected $defaultAll = false;
+    protected $format;
+
+    /**
+     * The current value of the variable.
+     *
+     * @var mixed
+     */
+    protected $value;
 
     /**
      * Variable constructor.
@@ -78,16 +85,23 @@ class Variable
      * @param string     $type
      * @param mixed|null $default
      * @param array      $options
-     * @param bool       $defaultAll
+     * @param string     $format
      */
-    public function __construct($name, $display, $type, $default = null, array $options = [], $defaultAll = false)
-    {
+    public function __construct(
+        $name,
+        $display,
+        $type,
+        $default = null,
+        array $options = [],
+        $format = null
+    ) {
         $this->setName($name)
             ->setDisplay($display)
             ->setType($type)
             ->setDefault($default)
-            ->setOptions($options)
-            ->setDefaultAll($defaultAll);
+            ->setOptions($options);
+
+        $this->value = $this->getDefault();
     }
 
     /**
@@ -206,23 +220,99 @@ class Variable
     }
 
     /**
-     * Should all values be selected for variables with multiple values?
+     * Set the format.
      *
-     * @param bool $defaultAll
+     * @param string $format
      *
      * @return $this
      */
-    public function setDefaultAll($defaultAll)
+    public function setFormat($format)
     {
-        $this->defaultAll = boolval($defaultAll);
+        $this->format = $format;
         return $this;
     }
 
     /**
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->format;
+    }
+
+    /**
+     * Set the value.
+     *
+     * @param mixed $value
+     *
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        switch ($this->getType()) {
+            case self::TYPE_DATE:
+                $this->value = $this->getValidDate($value);
+                break;
+            case self::TYPE_SELECT:
+            case self::TYPE_SELECT_MULTIPLE:
+                $this->value = $this->getValidSelect($value);
+                break;
+            default:
+                $this->value = $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the value.
+     *
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Validate a date value.
+     *
+     * @param string $value
+     *
      * @return bool
      */
-    public function getDefaultAll()
+    protected function getValidDate($value)
     {
-        return $this->defaultAll;
+        if (!$this->format) {
+            throw new \UnexpectedValueException("A format is required for date variables");
+        }
+
+        $date = \DateTime::createFromFormat($this->format, $value);
+
+        if (!$date || $date->format($this->format) != $value) {
+            throw new \InvalidArgumentException("Invalid value given for $this->name: '$value'");
+        }
+
+        return $value;
+    }
+
+    /**
+     * Validate a select or multiple-select value.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    protected function getValidSelect($value)
+    {
+        $selected = (array) $value;
+
+        foreach ($selected as $item) {
+            if (!in_array($item, $this->getOptions())) {
+                throw new \InvalidArgumentException("Invalid value given for $this->name: '$value'");
+            }
+        }
+
+        return $value;
     }
 }

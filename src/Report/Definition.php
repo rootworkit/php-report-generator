@@ -227,6 +227,24 @@ class Definition
     }
 
     /**
+     * Set variable values from an array.
+     *
+     * @param array $values
+     *
+     * @return $this
+     */
+    public function setVariableValues(array $values)
+    {
+        foreach ($this->variables as $variable) {
+            if (array_key_exists($variable->getName(), $values)) {
+                $variable->setValue($values[$variable->getName()]);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Add columns from definition array.
      *
      * @param array $columns
@@ -264,9 +282,9 @@ class Definition
                     throw new \UnexpectedValueException("Column definitions must contain a $property");
                 }
 
-                $options    = isset($variable->options) ? (array) $variable->options : [];
-                $default    = isset($variable->default) ? $variable->default : null;
-                $defaultAll = isset($variable->defaultAll) ? boolval($variable->defaultAll) : false;
+                $options = isset($variable->options) ? (array) $variable->options : [];
+                $default = isset($variable->default) ? $variable->default : null;
+                $format  = isset($variable->format) ? $variable->format : null;
 
                 $this->addVariable(new Variable(
                     $variable->name,
@@ -274,7 +292,7 @@ class Definition
                     $variable->type,
                     $default,
                     $options,
-                    $defaultAll
+                    $format
                 ));
             }
         }
