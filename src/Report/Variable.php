@@ -99,7 +99,8 @@ class Variable
             ->setDisplay($display)
             ->setType($type)
             ->setDefault($default)
-            ->setOptions($options);
+            ->setOptions($options)
+            ->setFormat($format);
 
         $this->value = $this->getDefault();
     }
