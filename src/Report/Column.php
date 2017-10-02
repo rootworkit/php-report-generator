@@ -22,19 +22,19 @@ class Column
     /**
      * Type constants
      */
-    const TYPE_BOOLEAN  = 'Boolean';
-    const TYPE_DATE     = 'Date';
-    const TYPE_FLOAT    = 'Float';
-    const TYPE_INTEGER  = 'Integer';
-    const TYPE_STRING   = 'String';
+    const TYPE_BOOLEAN = 'boolean';
+    const TYPE_DATE    = 'date';
+    const TYPE_FLOAT   = 'float';
+    const TYPE_INTEGER = 'integer';
+    const TYPE_STRING  = 'string';
 
     /**
      * Format constants
      */
-    const FORMAT_CURRENCY   = 'Currency';
-    const FORMAT_EMAIL      = 'Email';
-    const FORMAT_NUMBER     = 'Number';
-    const FORMAT_URL        = 'URL';
+    const FORMAT_CURRENCY = 'currency';
+    const FORMAT_EMAIL    = 'email';
+    const FORMAT_NUMBER   = 'number';
+    const FORMAT_URL      = 'url';
 
     /**
      * The column name.
