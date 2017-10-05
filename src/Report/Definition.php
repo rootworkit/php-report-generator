@@ -277,10 +277,11 @@ class Definition
                 if (!property_exists($column, $property)) {
                     throw new \UnexpectedValueException("Column definitions must contain a $property");
                 }
-
-                $format = isset($column->format) ? $column->format : null;
-                $this->addColumn(new Column($column->name, $column->display, $column->type, $format));
             }
+
+            $format = isset($column->format) ? $column->format : null;
+            $total  = isset($column->total) ? $column->total : false;
+            $this->addColumn(new Column($column->name, $column->display, $column->type, $format, $total));
         }
 
         return $this;
