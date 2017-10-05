@@ -96,7 +96,7 @@ abstract class ReportAbstract implements \JsonSerializable
 
         foreach ($this->definition->getColumns() as $column) {
             $columns[] = [
-                'name' => $column->getName(),
+                'name' => $column->getDisplay(),
                 'type' => $column->getType(),
             ];
         }

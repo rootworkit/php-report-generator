@@ -111,6 +111,36 @@ class ReportTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * Test serializing a report to JSON.
+     */
+    public function testJson()
+    {
+        $expected = json_encode([
+            'title' => 'Foo Report',
+            'columns' => [
+                ['name' => 'ID', 'type' => 'integer'],
+                ['name' => 'Name', 'type' => 'string'],
+                ['name' => 'Score', 'type' => 'integer'],
+            ],
+            'rows' => [
+                ['id' => 1, 'name' => 'Foo', 'score' => 1],
+                ['id' => 2, 'name' => 'Bar', 'score' => 2],
+                ['id' => 3, 'name' => 'Baz', 'score' => 3],
+                ['id' => 4, 'name' => 'Qux', 'score' => 5],
+                ['id' => 5, 'name' => 'Gar', 'score' => 8],
+            ],
+            'totals' => ['id' => null, 'name' => null, 'score' => 19],
+        ]);
+
+        $this->definition->setVariableValues(['multiplier' => 1]);
+        $sut = $this->sut;
+        $sut->run();
+        $actual = json_encode($sut);
+
+        $this->assertEquals($expected, $actual);
+    }
 }
 
 class FooReport extends ReportAbstract implements ReportInterface
