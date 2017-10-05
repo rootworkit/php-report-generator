@@ -310,7 +310,7 @@ class Variable
 
         foreach ($selected as $item) {
             if (!in_array($item, $this->getOptions())) {
-                throw new \InvalidArgumentException("Invalid value given for $this->name: '$value'");
+                throw new \InvalidArgumentException("Invalid value given for $this->name: '$item'");
             }
         }
 
