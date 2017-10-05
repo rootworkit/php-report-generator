@@ -16,7 +16,7 @@ namespace Rootwork\Report;
  *
  * @package Rootwork\Report
  */
-abstract class ReportAbstract
+abstract class ReportAbstract implements \JsonSerializable
 {
 
     /**
@@ -58,6 +58,10 @@ abstract class ReportAbstract
      */
     public function getRows()
     {
+        if (empty($this->rows)) {
+            $this->run();
+        }
+
         return $this->rows;
     }
 
@@ -81,5 +85,27 @@ abstract class ReportAbstract
         }
 
         return $totals;
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        $columns = [];
+
+        foreach ($this->definition->getColumns() as $column) {
+            $columns[] = [
+                'name' => $column->getName(),
+                'type' => $column->getType(),
+            ];
+        }
+
+        return [
+            'title' => $this->definition->getTitle(),
+            'columns' => $columns,
+            'rows' => $this->getRows(),
+            'totals' => $this->getTotals(),
+        ];
     }
 }
