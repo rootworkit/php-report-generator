@@ -84,7 +84,7 @@ class ReportTest extends TestCase
                     ['id' => 4, 'name' => 'Qux', 'score' => 5],
                     ['id' => 5, 'name' => 'Gar', 'score' => 8],
                 ],
-                ['id' => null, 'name' => null, 'score' => 19],
+                [null, null, 19],
                 ['multiplier' => 1],
             ],
             [
@@ -95,7 +95,7 @@ class ReportTest extends TestCase
                     ['id' => 4, 'name' => 'Qux', 'score' => 10],
                     ['id' => 5, 'name' => 'Gar', 'score' => 16],
                 ],
-                ['id' => null, 'name' => null, 'score' => 38],
+                [null, null, 38],
                 ['multiplier' => 2],
             ],
             [
@@ -106,7 +106,7 @@ class ReportTest extends TestCase
                     ['id' => 4, 'name' => 'Qux', 'score' => 50],
                     ['id' => 5, 'name' => 'Gar', 'score' => 80],
                 ],
-                ['id' => null, 'name' => null, 'score' => 190],
+                [null, null, 190],
                 ['multiplier' => 10],
             ],
         ];
@@ -131,7 +131,7 @@ class ReportTest extends TestCase
                 ['id' => 4, 'name' => 'Qux', 'score' => 5],
                 ['id' => 5, 'name' => 'Gar', 'score' => 8],
             ],
-            'totals' => ['id' => null, 'name' => null, 'score' => 19],
+            'totals' => [null, null, 19],
         ]);
 
         $this->definition->setVariableValues(['multiplier' => 1]);

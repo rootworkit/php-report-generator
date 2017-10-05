@@ -81,7 +81,7 @@ abstract class ReportAbstract implements \JsonSerializable
                 $value = array_sum(array_column($this->getRows(), $column->getName()));
             }
 
-            $totals[$column->getName()] = $value;
+            $totals[] = $value;
         }
 
         return $totals;
