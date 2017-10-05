@@ -16,7 +16,7 @@ namespace Rootwork\Report;
  *
  * @package Rootwork\Report
  */
-class Column
+class Column implements \JsonSerializable
 {
 
     /**
@@ -214,5 +214,24 @@ class Column
     public function isTotal()
     {
         return $this->total;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     *
+     * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'name'    => $this->getName(),
+            'display' => $this->getDisplay(),
+            'type'    => $this->getType(),
+            'format'  => $this->getFormat(),
+            'total'   => $this->isTotal(),
+        ];
     }
 }

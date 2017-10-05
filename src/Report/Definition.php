@@ -18,7 +18,7 @@ namespace Rootwork\Report;
  *
  * @package Rootwork\Report
  */
-class Definition
+class Definition implements \JsonSerializable
 {
 
     /**
@@ -27,13 +27,6 @@ class Definition
      * @var string
      */
     protected $title;
-
-    /**
-     * The report PHP class.
-     *
-     * @var string
-     */
-    protected $class;
 
     /**
      * Column definitions.
@@ -46,46 +39,6 @@ class Definition
      * @var Variable[]
      */
     protected $variables = [];
-
-    /**
-     * Definition constructor.
-     *
-     * @param string $jsonPath
-     */
-    public function __construct($jsonPath = null)
-    {
-        if ($jsonPath) {
-            if (!is_readable($jsonPath)) {
-                throw new \InvalidArgumentException("Unable to read JSON file: '$jsonPath'");
-            }
-
-            $json = json_decode(file_get_contents($jsonPath));
-
-            if (!isset($json->title)) {
-                throw new \UnexpectedValueException('Report definitions must have a title');
-            }
-
-            if (!isset($json->class)) {
-                throw new \UnexpectedValueException('Report definitions must have a class name');
-            }
-
-            if (!isset($json->columns) || !is_array($json->columns)) {
-                throw new \UnexpectedValueException('Report definitions must have an array of columns');
-            }
-
-            if (isset($json->variables) && !is_array($json->variables)) {
-                throw new \UnexpectedValueException('Report variables must be in an array');
-            }
-
-            $this->setTitle($json->title);
-            $this->setClass($json->class);
-            $this->setColumnsArray($json->columns);
-
-            if (isset($json->variables)) {
-                $this->setVariablesArray($json->variables);
-            }
-        }
-    }
 
     /**
      * Set the report title.
@@ -106,29 +59,6 @@ class Definition
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Set the report class name.
-     *
-     * @param string $class
-     *
-     * @return $this
-     */
-    public function setClass($class)
-    {
-        $this->class = $class;
-        return $this;
-    }
-
-    /**
-     * Get the report class name.
-     *
-     * @return string
-     */
-    public function getClass()
-    {
-        return $this->class;
     }
 
     /**
@@ -179,7 +109,7 @@ class Definition
      */
     public function addVariable(Variable $variable)
     {
-        $this->variables[$variable->getName()] = $variable;
+        $this->variables[] = $variable;
         return $this;
     }
 
@@ -199,24 +129,6 @@ class Definition
         }
 
         return $this;
-    }
-
-    /**
-     * Get a report instance from the definition.
-     *
-     * @param array|null $options
-     *
-     * @return ReportInterface
-     */
-    public function getReport(array $options = null)
-    {
-        $class = $this->getClass();
-
-        if ($options) {
-            return new $class($this, $options);
-        }
-
-        return new $class($this);
     }
 
     /**
@@ -264,59 +176,19 @@ class Definition
     }
 
     /**
-     * Add columns from definition array.
+     * Specify data which should be serialized to JSON
      *
-     * @param array $columns
-     *
-     * @return $this
+     * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
      */
-    protected function setColumnsArray(array $columns)
+    public function jsonSerialize()
     {
-        foreach ($columns as $column) {
-            foreach (['name', 'display', 'type'] as $property) {
-                if (!property_exists($column, $property)) {
-                    throw new \UnexpectedValueException("Column definitions must contain a $property");
-                }
-            }
-
-            $format = isset($column->format) ? $column->format : null;
-            $total  = isset($column->total) ? $column->total : false;
-            $this->addColumn(new Column($column->name, $column->display, $column->type, $format, $total));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add variables from definition array.
-     *
-     * @param array $variables
-     *
-     * @return $this
-     */
-    protected function setVariablesArray(array $variables)
-    {
-        foreach ($variables as $variable) {
-            foreach (['name', 'display', 'type'] as $property) {
-                if (!property_exists($variable, $property)) {
-                    throw new \UnexpectedValueException("Column definitions must contain a $property");
-                }
-
-                $options = isset($variable->options) ? (array) $variable->options : [];
-                $default = isset($variable->default) ? $variable->default : null;
-                $format  = isset($variable->format) ? $variable->format : null;
-
-                $this->addVariable(new Variable(
-                    $variable->name,
-                    $variable->display,
-                    $variable->type,
-                    $default,
-                    $options,
-                    $format
-                ));
-            }
-        }
-
-        return $this;
+        return [
+            'title'     => $this->getTitle(),
+            'columns'   => $this->getColumns(),
+            'variables' => $this->getVariables(),
+        ];
     }
 }

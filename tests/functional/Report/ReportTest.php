@@ -17,51 +17,19 @@ class ReportTest extends TestCase
 {
 
     /**
-     * @var FooReport
-     */
-    protected $sut;
-
-    /**
-     * @var Definition
-     */
-    protected $definition;
-
-    /**
-     * Set up the test.
-     */
-    public function setUp()
-    {
-        $columns    = [
-            new Column('id', 'ID', Column::TYPE_INTEGER, Column::FORMAT_NUMBER),
-            new Column('name', 'Name', Column::TYPE_STRING),
-            new Column('score', 'Score', Column::TYPE_INTEGER, Column::FORMAT_NUMBER, true),
-        ];
-        $variable   = new Variable('multiplier', 'Multiplier', Variable::TYPE_NUMBER, 1);
-        $definition = new Definition();
-
-        $definition->setTitle('Foo Report');
-        $definition->setClass(FooReport::class);
-        $definition->setColumns($columns);
-        $definition->setVariables([$variable]);
-
-        $this->definition = $definition;
-        $this->sut = $definition->getReport();
-    }
-
-    /**
      * Test running a report.
      *
      * @param array $expectedData
      * @param array $expectedTotals
-     * @param array $values
+     * @param array $parameters
      *
      * @dataProvider provideRun
      */
-    public function testRun(array $expectedData, array $expectedTotals, array $values)
+    public function testRun(array $expectedData, array $expectedTotals, array $parameters)
     {
-        $this->definition->setVariableValues($values);
-        $sut = $this->sut;
-        $actualData = $sut->run();
+        $sut = new FooReport();
+        $sut->setParameters($parameters);
+        $actualData   = $sut->run();
         $actualTotals = $sut->getTotals();
 
         $this->assertEquals($expectedData, $actualData);
@@ -134,8 +102,8 @@ class ReportTest extends TestCase
             'totals' => [null, null, 19],
         ]);
 
-        $this->definition->setVariableValues(['multiplier' => 1]);
-        $sut = $this->sut;
+        $sut = new FooReport();
+        $sut->setParameters(['multiplier' => 1]);
         $sut->run();
         $actual = json_encode($sut);
 
@@ -145,6 +113,21 @@ class ReportTest extends TestCase
 
 class FooReport extends ReportAbstract implements ReportInterface
 {
+
+    /**
+     * Define the report.
+     */
+    protected function define()
+    {
+        $this->getDefinition()
+            ->setTitle('Foo Report')
+            ->setColumns([
+                new Column('id', 'ID', Column::TYPE_INTEGER, Column::FORMAT_NUMBER),
+                new Column('name', 'Name', Column::TYPE_STRING),
+                new Column('score', 'Score', Column::TYPE_INTEGER, Column::FORMAT_NUMBER, true),
+            ])
+            ->setVariables([new Variable('multiplier', 'Multiplier', Variable::TYPE_NUMBER, 1)]);
+    }
 
     /**
      * Run the report and return results.

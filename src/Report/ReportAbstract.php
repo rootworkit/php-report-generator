@@ -36,13 +36,18 @@ abstract class ReportAbstract implements \JsonSerializable
     /**
      * ReportAbstract constructor.
      *
-     * @param Definition $definition
      * @param array $options
      */
-    public function __construct(Definition $definition, array $options = [])
+    public function __construct(array $options = [])
     {
-        $this->definition = $definition;
+        $this->definition = new Definition();
+        $this->define();
     }
+
+    /**
+     * Method for setting up the report definition.
+     */
+    abstract protected function define();
 
     /**
      * Run the report and return results.
@@ -50,6 +55,29 @@ abstract class ReportAbstract implements \JsonSerializable
      * @return array[]
      */
     abstract public function run();
+
+    /**
+     * Get the report definition.
+     *
+     * @return Definition
+     */
+    public function getDefinition()
+    {
+        return $this->definition;
+    }
+
+    /**
+     * Set the variable values.
+     *
+     * @param array $parameters
+     *
+     * @return $this
+     */
+    public function setParameters(array $parameters = [])
+    {
+        $this->definition->setVariableValues($parameters);
+        return $this;
+    }
 
     /**
      * Get the report rows.
