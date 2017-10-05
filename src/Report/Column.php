@@ -58,24 +58,35 @@ class Column
     protected $type;
 
     /**
-     * @var string|\Closure
+     * Column format.
+     *
+     * @var string
      */
     protected $format = null;
 
     /**
+     * Add a row with a total for this column?
+     *
+     * @var bool
+     */
+    protected $total = false;
+
+    /**
      * Column constructor.
      *
-     * @param string          $name
-     * @param string          $display
-     * @param string          $type
-     * @param string|\Closure $format
+     * @param string $name
+     * @param string $display
+     * @param string $type
+     * @param string $format
+     * @param bool   $total
      */
-    public function __construct($name, $display, $type, $format = null)
+    public function __construct($name, $display, $type, $format = null, $total = false)
     {
         $this->setName($name)
             ->setDisplay($display)
             ->setType($type)
-            ->setFormat($format);
+            ->setFormat($format)
+            ->setTotal($total);
     }
 
     /**
@@ -182,5 +193,26 @@ class Column
     public function getFormat()
     {
         return $this->format;
+    }
+
+    /**
+     * Set whether this column should be totaled.
+     *
+     * @param bool $total
+     *
+     * @return $this
+     */
+    public function setTotal($total)
+    {
+        $this->total = boolval($total);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTotal()
+    {
+        return $this->total;
     }
 }

@@ -33,7 +33,7 @@ class Definition
      *
      * @var string
      */
-    protected $class = 'Rootwork\Report\Report';
+    protected $class;
 
     /**
      * Column definitions.
@@ -65,6 +65,10 @@ class Definition
                 throw new \UnexpectedValueException('Report definitions must have a title');
             }
 
+            if (!isset($json->class)) {
+                throw new \UnexpectedValueException('Report definitions must have a class name');
+            }
+
             if (!isset($json->columns) || !is_array($json->columns)) {
                 throw new \UnexpectedValueException('Report definitions must have an array of columns');
             }
@@ -74,11 +78,8 @@ class Definition
             }
 
             $this->setTitle($json->title);
+            $this->setClass($json->class);
             $this->setColumnsArray($json->columns);
-
-            if (isset($json->class)) {
-                $this->setClass($json->class);
-            }
 
             if (isset($json->variables)) {
                 $this->setVariablesArray($json->variables);
@@ -203,19 +204,37 @@ class Definition
     /**
      * Get a report instance from the definition.
      *
-     * @param array|null $args
+     * @param array|null $options
      *
      * @return ReportInterface
      */
-    public function getReport(array $args = null)
+    public function getReport(array $options = null)
     {
         $class = $this->getClass();
 
-        if ($args) {
-            return new $class(...$args);
+        if ($options) {
+            return new $class($this, $options);
         }
 
-        return new $class();
+        return new $class($this);
+    }
+
+    /**
+     * Get a variable by name.
+     *
+     * @param string $name
+     *
+     * @return null|Variable
+     */
+    public function getVariable($name)
+    {
+        foreach ($this->variables as $variable) {
+            if ($variable->getName() == $name) {
+                return $variable;
+            }
+        }
+
+        return null;
     }
 
     /**

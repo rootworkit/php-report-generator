@@ -16,11 +16,9 @@ interface ReportInterface
 {
 
     /**
-     * Run a report and return results.
-     *
-     * @param array $variables
+     * Run the report and return results.
      *
      * @return array[]
      */
-    public function run(array $variables = []);
+    public function run();
 }
