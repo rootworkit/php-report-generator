@@ -88,9 +88,9 @@ class ReportTest extends TestCase
         $expected = json_encode([
             'title' => 'Foo Report',
             'columns' => [
-                ['name' => 'ID', 'type' => 'integer'],
-                ['name' => 'Name', 'type' => 'string'],
-                ['name' => 'Score', 'type' => 'integer'],
+                ['name' => 'ID', 'type' => 'integer', 'format' => 'number'],
+                ['name' => 'Name', 'type' => 'string', 'format' => null],
+                ['name' => 'Score', 'type' => 'integer', 'format' => 'number'],
             ],
             'rows' => [
                 ['id' => 1, 'name' => 'Foo', 'score' => 1],
