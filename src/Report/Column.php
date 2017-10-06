@@ -171,19 +171,7 @@ class Column implements \JsonSerializable
      */
     public function setFormat($format)
     {
-        $formats = [
-            self::FORMAT_CURRENCY,
-            self::FORMAT_EMAIL,
-            self::FORMAT_NUMBER,
-            self::FORMAT_URL,
-        ];
-
-        if (null !== $format && !in_array($format, $formats)) {
-            throw new \InvalidArgumentException("Invalid column format: '$format'");
-        }
-
         $this->format = $format;
-
         return $this;
     }
 

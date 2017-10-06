@@ -188,6 +188,22 @@ class Definition implements \JsonSerializable
     }
 
     /**
+     * Get variable values keyed by name.
+     *
+     * @return array
+     */
+    public function getVariableValues()
+    {
+        $values = [];
+
+        foreach ($this->getVariables() as $variable) {
+            $values[$variable->getName()] = $variable->getValue();
+        }
+
+        return $values;
+    }
+
+    /**
      * @return bool
      */
     public function hasTotal()
