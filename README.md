@@ -3,6 +3,30 @@ A time-saving PHP reporting library.
 
 _NOTE: This package is currently alpha and unstable. As we use it and settle on a final set of features for first release, we'll look to make 1.0.0 our first stable tag._
 
+## Installation
+
+Install composer in a common location or in your project:
+
+```bash
+curl -s http://getcomposer.org/installer | php
+```
+
+Create the composer.json file as follows:
+
+```json
+{
+    "require": {
+        "rootwork/php-report-generator": "0.1.0"
+    }
+}
+```
+
+Run the composer installer:
+
+```bash
+php composer.phar install
+```
+
 ## Concepts
 This library is designed to give developers a way to encapsulate reports with a single class.
 
