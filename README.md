@@ -10,7 +10,7 @@ This library is designed to give developers a way to encapsulate reports with a 
 Your report class should extend `Rootwork\Report\ReportAbstract` and implement `Rootwork\Report\ReportInterface`. This will give you two abstract public methods to implement in your class: `define()` and `run()`.
 
 ### Definition, Columns and Variables
-All reports have a `Definition` object the defines the features of the report. You add `Column` instances to define your columns and optional `Variable` instances if you want to pass variables to report (for an SQL `WHERE` clause for example).
+All reports have a `Definition` object the defines the features of the report. You add `Column` instances to define your columns and optional `Variable` instances if you want to pass variable parameters to your report (for an SQL `WHERE` clause for example).
 
 `Column($name, $display, $type, [$format = null, $total = false])`
 
