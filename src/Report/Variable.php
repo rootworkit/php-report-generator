@@ -309,7 +309,7 @@ class Variable implements \JsonSerializable
         $selected = (array) $value;
 
         foreach ($selected as $item) {
-            if (!in_array($item, $this->getOptions())) {
+            if (!array_key_exists($item, $this->getOptions())) {
                 throw new \InvalidArgumentException("Invalid value given for $this->name: '$item'");
             }
         }
