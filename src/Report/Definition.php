@@ -41,6 +41,13 @@ class Definition implements \JsonSerializable
     protected $variables = [];
 
     /**
+     * Flag for whether the report has any "total" columns.
+     *
+     * @var bool
+     */
+    protected $hasTotal = false;
+
+    /**
      * Set the report title.
      *
      * @param string $title
@@ -70,6 +77,10 @@ class Definition implements \JsonSerializable
      */
     public function addColumn(Column $column)
     {
+        if ($column->isTotal()) {
+            $this->hasTotal = true;
+        }
+
         $this->columns[] = $column;
         return $this;
     }
@@ -83,6 +94,7 @@ class Definition implements \JsonSerializable
      */
     public function setColumns(array $columns = [])
     {
+        $this->hasTotal = false;
         $this->columns = [];
 
         foreach ($columns as $column) {
@@ -173,6 +185,14 @@ class Definition implements \JsonSerializable
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTotal()
+    {
+        return $this->hasTotal;
     }
 
     /**

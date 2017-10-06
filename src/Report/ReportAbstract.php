@@ -129,11 +129,16 @@ abstract class ReportAbstract implements \JsonSerializable
             ];
         }
 
-        return [
+        $data = [
             'title' => $this->definition->getTitle(),
             'columns' => $columns,
             'rows' => $this->getRows(),
-            'totals' => $this->getTotals(),
         ];
+
+        if ($this->getDefinition()->hasTotal()) {
+            $data['totals'] = $this->getTotals();
+        }
+
+        return $data;
     }
 }
