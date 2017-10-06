@@ -1,14 +1,13 @@
 {
-  "name": "mikesoule/rootwork-reports",
-  "version": "dev-develop",
-  "description": "A time-saving PHP reporting framework.",
+  "name": "rootwork/php-report-generator",
+  "description": "A time-saving PHP reporting library.",
   "license": "MIT",
   "keywords": [
     "rootwork",
     "php",
     "reports"
   ],
-  "homepage": "https://github.com/mikesoule/rootwork-reports",
+  "homepage": "https://github.com/rootwork/php-report-generator",
   "authors": [
     {
       "name": "Mike Soule",
