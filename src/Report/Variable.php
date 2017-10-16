@@ -22,6 +22,7 @@ class Variable implements \JsonSerializable
     /**
      * Type constants
      */
+    const TYPE_CHECKBOX        = 'checkbox';
     const TYPE_DATE            = 'date';
     const TYPE_NUMBER          = 'number';
     const TYPE_SELECT          = 'select';
@@ -251,6 +252,9 @@ class Variable implements \JsonSerializable
     public function setValue($value)
     {
         switch ($this->getType()) {
+            case self::TYPE_CHECKBOX:
+                $this->value = boolval($value);
+                break;
             case self::TYPE_DATE:
                 $this->value = $this->getValidDate($value);
                 break;
