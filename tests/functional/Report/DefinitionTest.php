@@ -32,7 +32,8 @@ class DefinitionTest extends TestCase
                     'type' => 'number',
                     'default' => 1,
                     'options' => [],
-                    'format' => null
+                    'format' => null,
+                    'description' => 'Enter a multiplier',
                 ],
             ],
         ]);
@@ -42,7 +43,9 @@ class DefinitionTest extends TestCase
             ->addColumn(new Column('id', 'ID', Column::TYPE_INTEGER, Column::FORMAT_NUMBER))
             ->addColumn(new Column('name', 'Name', Column::TYPE_STRING))
             ->addColumn(new Column('score', 'Score', Column::TYPE_INTEGER, Column::FORMAT_NUMBER, true))
-            ->addVariable(new Variable('multiplier', 'Multiplier', Variable::TYPE_NUMBER, 1));
+            ->addVariable(new Variable(
+                'multiplier', 'Multiplier', Variable::TYPE_NUMBER, 1, [], null, 'Enter a multiplier'
+            ));
         $actual = json_encode($sut);
 
         $this->assertJsonStringEqualsJsonString($expected, $actual);
