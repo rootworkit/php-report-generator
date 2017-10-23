@@ -52,7 +52,7 @@ abstract class ReportAbstract implements \JsonSerializable
     /**
      * Run the report and return results.
      *
-     * @return array[]
+     * @return void
      */
     abstract public function run();
 
@@ -76,6 +76,17 @@ abstract class ReportAbstract implements \JsonSerializable
     public function setParameters(array $parameters = [])
     {
         $this->definition->setVariableValues($parameters);
+
+        if ($pager = $this->getDefinition()->getPager()) {
+            if (array_key_exists('page', $parameters)) {
+                $pager->setPage($parameters['page']);
+            }
+
+            if (array_key_exists('limit', $parameters)) {
+                $pager->setLimit($parameters['limit']);
+            }
+        }
+
         return $this;
     }
 
@@ -90,6 +101,12 @@ abstract class ReportAbstract implements \JsonSerializable
             $this->run();
         }
 
+        $pager = $this->getDefinition()->getPager();
+
+        if ($pager && $pager->isActive()) {
+            return $pager->getPagedRows($this->rows);
+        }
+
         return $this->rows;
     }
 
@@ -102,7 +119,7 @@ abstract class ReportAbstract implements \JsonSerializable
     {
         $totals = [];
 
-        foreach ($this->definition->getColumns() as $column) {
+        foreach ($this->getDefinition()->getColumns() as $column) {
             $value = null;
 
             if ($column->isTotal()) {
@@ -122,7 +139,7 @@ abstract class ReportAbstract implements \JsonSerializable
     {
         $columns = [];
 
-        foreach ($this->definition->getColumns() as $column) {
+        foreach ($this->getDefinition()->getColumns() as $column) {
             $columns[] = [
                 'name'   => $column->getDisplay(),
                 'type'   => $column->getType(),
@@ -131,7 +148,8 @@ abstract class ReportAbstract implements \JsonSerializable
         }
 
         $data = [
-            'title' => $this->definition->getTitle(),
+            'title' => $this->getDefinition()->getTitle(),
+            'paging' => $this->getDefinition()->getPager(),
             'columns' => $columns,
             'rows' => $this->getRows(),
         ];

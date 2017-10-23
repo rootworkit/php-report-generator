@@ -29,7 +29,8 @@ class ReportTest extends TestCase
     {
         $sut = new FooReport();
         $sut->setParameters($parameters);
-        $actualData   = $sut->run();
+        $sut->run();
+        $actualData   = $sut->getRows();
         $actualTotals = $sut->getTotals();
 
         $this->assertEquals($expectedData, $actualData);
@@ -87,6 +88,7 @@ class ReportTest extends TestCase
     {
         $expected = json_encode([
             'title' => 'Foo Report',
+            'paging' => null,
             'columns' => [
                 ['name' => 'ID', 'type' => 'integer', 'format' => 'number'],
                 ['name' => 'Name', 'type' => 'string', 'format' => null],
@@ -131,8 +133,6 @@ class FooReport extends ReportAbstract implements ReportInterface
 
     /**
      * Run the report and return results.
-     *
-     * @return array[]
      */
     public function run()
     {
@@ -144,7 +144,5 @@ class FooReport extends ReportAbstract implements ReportInterface
             ['id' => 4, 'name' => 'Qux', 'score' => 5 * $multiplier],
             ['id' => 5, 'name' => 'Gar', 'score' => 8 * $multiplier],
         ];
-
-        return $this->rows;
     }
 }

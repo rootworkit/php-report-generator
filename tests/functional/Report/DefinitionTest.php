@@ -16,6 +16,9 @@ use Rootwork\Test\TestCase;
 class DefinitionTest extends TestCase
 {
 
+    /**
+     * Test serializing definition to JSON.
+     */
     public function testJson()
     {
         $expected = json_encode([
@@ -36,6 +39,7 @@ class DefinitionTest extends TestCase
                     'description' => 'Enter a multiplier',
                 ],
             ],
+            'paging' => null,
         ]);
 
         $sut = new Definition();

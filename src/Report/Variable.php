@@ -86,6 +86,13 @@ class Variable implements \JsonSerializable
     protected $description = null;
 
     /**
+     * Reserved words that cannot be used as variable names.
+     *
+     * @var array
+     */
+    protected $reserved = ['page', 'limit'];
+
+    /**
      * Variable constructor.
      *
      * @param string      $name
@@ -123,6 +130,12 @@ class Variable implements \JsonSerializable
      */
     public function setName($name)
     {
+        $reserved = array_map('strtolower', $this->reserved);
+
+        if (in_array(strtolower($name), $reserved)) {
+            throw new \InvalidArgumentException("Variable cannot be named '$name' because that is a reserved word");
+        }
+
         $this->name = $name;
         return $this;
     }

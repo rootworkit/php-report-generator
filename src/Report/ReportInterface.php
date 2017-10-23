@@ -17,8 +17,30 @@ interface ReportInterface
 
     /**
      * Run the report and return results.
-     *
-     * @return array[]
      */
     public function run();
+
+    /**
+     * Set report parameters, including variables and pager settings.
+     *
+     * @param array $parameters
+     *
+     * @return $this
+     */
+    public function setParameters(array $parameters = []);
+
+    /**
+     * @return array
+     */
+    public function getRows();
+
+    /**
+     * @return Definition
+     */
+    public function getDefinition();
+
+    /**
+     * @return array
+     */
+    public function getTotals();
 }

@@ -48,6 +48,13 @@ class Definition implements \JsonSerializable
     protected $hasTotal = false;
 
     /**
+     * An optional pager instance.
+     *
+     * @var Pager|null
+     */
+    protected $pager = null;
+
+    /**
      * Set the report title.
      *
      * @param string $title
@@ -212,6 +219,29 @@ class Definition implements \JsonSerializable
     }
 
     /**
+     * Set the pager.
+     *
+     * @param Pager $pager
+     *
+     * @return $this
+     */
+    public function setPager(Pager $pager)
+    {
+        $this->pager = $pager;
+        return $this;
+    }
+
+    /**
+     * Get the pager.
+     *
+     * @return null|Pager
+     */
+    public function getPager()
+    {
+        return $this->pager;
+    }
+
+    /**
      * Specify data which should be serialized to JSON
      *
      * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php
@@ -225,6 +255,7 @@ class Definition implements \JsonSerializable
             'title'     => $this->getTitle(),
             'columns'   => $this->getColumns(),
             'variables' => $this->getVariables(),
+            'paging'    => $this->getPager(),
         ];
     }
 }
