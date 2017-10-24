@@ -101,6 +101,7 @@ class ReportTest extends TestCase
                 ['id' => 4, 'name' => 'Qux', 'score' => 5],
                 ['id' => 5, 'name' => 'Gar', 'score' => 8],
             ],
+            'order' => [],
             'totals' => [null, null, 19],
         ]);
 

@@ -148,10 +148,11 @@ abstract class ReportAbstract implements \JsonSerializable
         }
 
         $data = [
-            'title' => $this->getDefinition()->getTitle(),
-            'paging' => $this->getDefinition()->getPager(),
+            'title'   => $this->getDefinition()->getTitle(),
+            'paging'  => $this->getDefinition()->getPager(),
             'columns' => $columns,
-            'rows' => $this->getRows(),
+            'rows'    => $this->getRows(),
+            'order'   => $this->getDefinition()->getOrder(),
         ];
 
         if ($this->getDefinition()->hasTotal()) {

@@ -55,6 +55,13 @@ class Definition implements \JsonSerializable
     protected $pager = null;
 
     /**
+     * Order columns.
+     *
+     * @var array
+     */
+    protected $order = [];
+
+    /**
      * Set the report title.
      *
      * @param string $title
@@ -117,6 +124,24 @@ class Definition implements \JsonSerializable
     public function getColumns()
     {
         return $this->columns;
+    }
+
+    /**
+     * Get a column by name.
+     *
+     * @param string $name
+     *
+     * @return Column|null
+     */
+    public function getColumn($name)
+    {
+        foreach ($this->getColumns() as $column) {
+            if ($column->getName() == $name) {
+                return $column;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -242,6 +267,58 @@ class Definition implements \JsonSerializable
     }
 
     /**
+     * Set order columns.
+     *
+     * @param array $order
+     *
+     * @return $this
+     */
+    public function setOrder(array $order)
+    {
+        $this->order = [];
+
+        foreach ($order as $column) {
+            $this->addOrder($column);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add an order column. Invalid columns are ignored.
+     *
+     * @param string $order
+     *
+     * @return $this
+     */
+    public function addOrder($order)
+    {
+        $direction = 'ASC';
+
+        if (substr(strtoupper($order), -5) == ' DESC') {
+            $direction = 'DESC';
+        }
+
+        $name = str_ireplace([' ASC', ' DESC'], '', $order);
+
+        if ($this->getColumn($name)) {
+            $this->order[] = "$name $direction";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get the order columns.
+     *
+     * @return array
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
      * Specify data which should be serialized to JSON
      *
      * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php
@@ -256,6 +333,7 @@ class Definition implements \JsonSerializable
             'columns'   => $this->getColumns(),
             'variables' => $this->getVariables(),
             'paging'    => $this->getPager(),
+            'order'     => $this->getOrder(),
         ];
     }
 }

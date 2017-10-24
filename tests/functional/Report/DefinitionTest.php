@@ -17,6 +17,26 @@ class DefinitionTest extends TestCase
 {
 
     /**
+     * @var Definition
+     */
+    protected $sut;
+
+    /**
+     * Setup the test.
+     */
+    public function setUp()
+    {
+        $this->sut = new Definition();
+        $this->sut->setTitle('Foo Report')
+            ->addColumn(new Column('id', 'ID', Column::TYPE_INTEGER, Column::FORMAT_NUMBER))
+            ->addColumn(new Column('name', 'Name', Column::TYPE_STRING))
+            ->addColumn(new Column('score', 'Score', Column::TYPE_INTEGER, Column::FORMAT_NUMBER, true))
+            ->addVariable(new Variable(
+                'multiplier', 'Multiplier', Variable::TYPE_NUMBER, 1, [], null, 'Enter a multiplier'
+            ));
+    }
+
+    /**
      * Test serializing definition to JSON.
      */
     public function testJson()
@@ -40,18 +60,23 @@ class DefinitionTest extends TestCase
                 ],
             ],
             'paging' => null,
+            'order'  => [],
         ]);
 
-        $sut = new Definition();
-        $sut->setTitle('Foo Report')
-            ->addColumn(new Column('id', 'ID', Column::TYPE_INTEGER, Column::FORMAT_NUMBER))
-            ->addColumn(new Column('name', 'Name', Column::TYPE_STRING))
-            ->addColumn(new Column('score', 'Score', Column::TYPE_INTEGER, Column::FORMAT_NUMBER, true))
-            ->addVariable(new Variable(
-                'multiplier', 'Multiplier', Variable::TYPE_NUMBER, 1, [], null, 'Enter a multiplier'
-            ));
-        $actual = json_encode($sut);
+        $actual = json_encode($this->sut);
 
         $this->assertJsonStringEqualsJsonString($expected, $actual);
+    }
+
+    /**
+     * Test sort order.
+     */
+    public function testOrder()
+    {
+        $expected = ['score DESC', 'name ASC'];
+        $this->sut->setOrder(['score Desc', 'name', 'foo']);
+        $actual = $this->sut->getOrder();
+
+        $this->assertEquals($expected, $actual);
     }
 }

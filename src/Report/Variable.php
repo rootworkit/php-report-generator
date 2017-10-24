@@ -90,7 +90,7 @@ class Variable implements \JsonSerializable
      *
      * @var array
      */
-    protected $reserved = ['page', 'limit'];
+    protected $reserved = ['limit', 'page', 'sort'];
 
     /**
      * Variable constructor.
