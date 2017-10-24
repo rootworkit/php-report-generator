@@ -200,7 +200,7 @@ class Pager implements \JsonSerializable
         $pagedRows = $rows;
 
         if ($limit = $this->getLimit()) {
-            $this->setPageCount($this->getRowCount() / $limit);
+            $this->setPageCount(ceil($this->getRowCount() / $limit));
             $page      = $this->getPage();
             $start     = ($page - 1) * $limit;
             $pagedRows = array_slice($rows, $start, $limit);
