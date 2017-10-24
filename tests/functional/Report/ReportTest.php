@@ -90,9 +90,27 @@ class ReportTest extends TestCase
             'title' => 'Foo Report',
             'paging' => null,
             'columns' => [
-                ['name' => 'ID', 'type' => 'integer', 'format' => 'number'],
-                ['name' => 'Name', 'type' => 'string', 'format' => null],
-                ['name' => 'Score', 'type' => 'integer', 'format' => 'number'],
+                [
+                    'name'    => 'id',
+                    'display' => 'ID',
+                    'type'    => 'integer',
+                    'format'  => 'number',
+                    'total'   => false,
+                ],
+                [
+                    'name'    => 'name',
+                    'display' => 'Name',
+                    'type'    => 'string',
+                    'format'  => null,
+                    'total'   => false,
+                ],
+                [
+                    'name'    => 'score',
+                    'display' => 'Score',
+                    'type'    => 'integer',
+                    'format'  => 'number',
+                    'total'   => true,
+                ],
             ],
             'rows' => [
                 ['id' => 1, 'name' => 'Foo', 'score' => 1],

@@ -141,20 +141,10 @@ abstract class ReportAbstract implements \JsonSerializable
      */
     public function jsonSerialize()
     {
-        $columns = [];
-
-        foreach ($this->getDefinition()->getColumns() as $column) {
-            $columns[] = [
-                'name'   => $column->getDisplay(),
-                'type'   => $column->getType(),
-                'format' => $column->getFormat(),
-            ];
-        }
-
         $data = [
             'title'   => $this->getDefinition()->getTitle(),
             'paging'  => $this->getDefinition()->getPager(),
-            'columns' => $columns,
+            'columns' => $this->getDefinition()->getColumns(),
             'rows'    => $this->getRows(),
             'order'   => $this->getDefinition()->getOrder(),
         ];
