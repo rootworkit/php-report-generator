@@ -87,6 +87,10 @@ abstract class ReportAbstract implements \JsonSerializable
             }
         }
 
+        if (isset($parameters['order'])) {
+            $this->getDefinition()->setOrder((array) $parameters['order']);
+        }
+
         return $this;
     }
 

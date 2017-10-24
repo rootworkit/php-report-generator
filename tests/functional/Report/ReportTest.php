@@ -101,12 +101,12 @@ class ReportTest extends TestCase
                 ['id' => 4, 'name' => 'Qux', 'score' => 5],
                 ['id' => 5, 'name' => 'Gar', 'score' => 8],
             ],
-            'order' => [],
+            'order' => ['name ASC'],
             'totals' => [null, null, 19],
         ]);
 
         $sut = new FooReport();
-        $sut->setParameters(['multiplier' => 1]);
+        $sut->setParameters(['multiplier' => 1, 'order' => 'name']);
         $sut->run();
         $actual = json_encode($sut);
 
