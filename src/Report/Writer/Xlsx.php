@@ -24,7 +24,7 @@ class Xlsx extends SpreadsheetAbstract implements WriterInterface
      */
     public function save($name)
     {
-        $writer = SpreadsheetWriterFactory::createWriter($this->spreadsheet, 'Xlsx');
+        $writer = SpreadsheetWriterFactory::createWriter($this->getSpreadsheet(), 'Xlsx');
         $writer->save($name);
     }
 
@@ -38,7 +38,7 @@ class Xlsx extends SpreadsheetAbstract implements WriterInterface
      */
     public function output($name, ResponseInterface $response = null)
     {
-        $writer  = SpreadsheetWriterFactory::createWriter($this->spreadsheet, 'Xlsx');
+        $writer  = SpreadsheetWriterFactory::createWriter($this->getSpreadsheet(), 'Xlsx');
         $headers = [
             'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition' => "attachment;filename=\"$name\"",

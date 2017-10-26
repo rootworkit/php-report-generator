@@ -23,7 +23,7 @@ class Pdf extends SpreadsheetAbstract implements WriterInterface
      */
     public function save($name)
     {
-        $writer = SpreadsheetWriterFactory::createWriter($this->spreadsheet, 'Mpdf');
+        $writer = SpreadsheetWriterFactory::createWriter($this->getSpreadsheet(), 'Mpdf');
         $writer->save($name);
     }
 
@@ -38,7 +38,7 @@ class Pdf extends SpreadsheetAbstract implements WriterInterface
         header("Content-Disposition: attachment;filename=\"$name\"");
         header('Cache-Control: max-age=0');
 
-        $writer = SpreadsheetWriterFactory::createWriter($this->spreadsheet, 'Mpdf');
+        $writer = SpreadsheetWriterFactory::createWriter($this->getSpreadsheet(), 'Mpdf');
         $writer->save('php://output');
     }
 }

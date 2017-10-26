@@ -23,7 +23,7 @@ class Csv extends SpreadsheetAbstract implements WriterInterface
      */
     public function save($name)
     {
-        $writer = SpreadsheetWriterFactory::createWriter($this->spreadsheet, 'Csv');
+        $writer = SpreadsheetWriterFactory::createWriter($this->getSpreadsheet(), 'Csv');
         $writer->save($name);
     }
 
@@ -38,7 +38,7 @@ class Csv extends SpreadsheetAbstract implements WriterInterface
         header("Content-Disposition: attachment;filename=\"$name\"");
         header('Cache-Control: max-age=0');
 
-        $writer = SpreadsheetWriterFactory::createWriter($this->spreadsheet, 'Csv');
+        $writer = SpreadsheetWriterFactory::createWriter($this->getSpreadsheet(), 'Csv');
         $writer->save('php://output');
     }
 }
