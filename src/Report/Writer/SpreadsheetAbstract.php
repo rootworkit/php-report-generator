@@ -55,6 +55,12 @@ abstract class SpreadsheetAbstract extends WriterAbstract
                 $spreadsheet->getActiveSheet()->getStyle($range)->getFont()->setBold(true);
                 $this->addRow($this->report->getTotals());
             }
+
+            $lastCol = $spreadsheet->getActiveSheet()->getHighestColumn();
+
+            foreach (range('A', $lastCol) as $col) {
+                $spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
+            }
         }
 
         return $this->spreadsheet;
