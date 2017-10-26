@@ -145,6 +145,22 @@ class Definition implements \JsonSerializable
     }
 
     /**
+     * Get column display names.
+     *
+     * @return array
+     */
+    public function getColumnDisplayNames()
+    {
+        $displays = [];
+
+        foreach ($this->getColumns() as $column) {
+            $displays[$column->getName()] = $column->getDisplay();
+        }
+
+        return $displays;
+    }
+
+    /**
      * Add a variable.
      *
      * @param Variable $variable

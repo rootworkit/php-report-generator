@@ -30,9 +30,30 @@ interface ReportInterface
     public function setParameters(array $parameters = []);
 
     /**
+     * @return Column[]
+     */
+    public function getColumns();
+
+    /**
+     * Get the resulting column display names after running report.
+     *
+     * @return array
+     */
+    public function getColumnDisplayNames();
+
+    /**
+     * Get current page of report rows.
+     *
      * @return array
      */
     public function getRows();
+
+    /**
+     * Get all rows (bypass paging).
+     *
+     * @return array
+     */
+    public function getAllRows();
 
     /**
      * @return Definition

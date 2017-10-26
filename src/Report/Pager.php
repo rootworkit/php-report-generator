@@ -43,33 +43,19 @@ class Pager implements \JsonSerializable
     protected $limit = null;
 
     /**
-     * By default, the pager does not actually do the work of paging results.
-     * If data is being loaded from a database, using the LIMIT and OFFSET clauses
-     * to page your data at query time is the most efficient approach.
-     *
-     * However, if your data set is not already paged, you can set 'active' to TRUE
-     * and the results will be paged when getRows() is called.
-     *
-     * @var bool
-     */
-    protected $active = false;
-
-    /**
      * Pager constructor.
      *
      * @param int      $page
      * @param int      $pageCount
      * @param int      $rowCount
      * @param int|null $limit
-     * @param bool     $active
      */
-    public function __construct($page = 1, $pageCount = 1, $rowCount = 0, $limit = null, $active = false)
+    public function __construct($page = 1, $pageCount = 1, $rowCount = 0, $limit = null)
     {
         $this->setPage($page)
             ->setPageCount($pageCount)
             ->setRowCount($rowCount)
-            ->setLimit($limit)
-            ->setActive($active);
+            ->setLimit($limit);
     }
 
     /**
@@ -165,29 +151,6 @@ class Pager implements \JsonSerializable
     }
 
     /**
-     * Enable/disable active paging.
-     *
-     * @param bool $active
-     *
-     * @return bool
-     */
-    public function setActive($active)
-    {
-        $this->active = boolval($active);
-        return $this->active;
-    }
-
-    /**
-     * Determine if active paging is enabled.
-     *
-     * @return bool
-     */
-    public function isActive()
-    {
-        return $this->active;
-    }
-
-    /**
      * Get a page from a row set.
      *
      * @param array $rows
@@ -224,7 +187,6 @@ class Pager implements \JsonSerializable
             'pageCount' => $this->getPageCount(),
             'rowCount'  => $this->getRowCount(),
             'limit'     => $this->getLimit(),
-            'active'    => $this->isActive(),
         ];
     }
 }

@@ -105,13 +105,53 @@ abstract class ReportAbstract implements \JsonSerializable
             $this->run();
         }
 
-        $pager = $this->getDefinition()->getPager();
-
-        if ($pager && $pager->isActive()) {
+        if ($pager = $this->getDefinition()->getPager()) {
             return $pager->getPagedRows($this->rows);
         }
 
         return $this->rows;
+    }
+
+    /**
+     * Get all report rows (bypass paging).
+     *
+     * @return array
+     */
+    public function getAllRows()
+    {
+        if (empty($this->rows)) {
+            $this->run();
+        }
+
+        return $this->rows;
+    }
+
+    /**
+     * Get the resulting columns after running report.
+     *
+     * @return Column[]
+     */
+    public function getColumns()
+    {
+        if (empty($this->rows)) {
+            $this->run();
+        }
+
+        return $this->getDefinition()->getColumns();
+    }
+
+    /**
+     * Get the resulting column display names after running report.
+     *
+     * @return array
+     */
+    public function getColumnDisplayNames()
+    {
+        if (empty($this->rows)) {
+            $this->run();
+        }
+
+        return $this->getDefinition()->getColumnDisplayNames();
     }
 
     /**
@@ -121,6 +161,10 @@ abstract class ReportAbstract implements \JsonSerializable
      */
     public function getTotals()
     {
+        if (empty($this->rows)) {
+            $this->run();
+        }
+
         $totals = [];
 
         foreach ($this->getDefinition()->getColumns() as $column) {
@@ -144,7 +188,7 @@ abstract class ReportAbstract implements \JsonSerializable
         $data = [
             'title'   => $this->getDefinition()->getTitle(),
             'paging'  => $this->getDefinition()->getPager(),
-            'columns' => $this->getDefinition()->getColumns(),
+            'columns' => $this->getColumns(),
             'rows'    => $this->getRows(),
             'order'   => $this->getDefinition()->getOrder(),
         ];

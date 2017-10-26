@@ -26,10 +26,9 @@ class PagerTest extends TestCase
             'pageCount' => 10,
             'rowCount'  => 300,
             'limit'     => 10,
-            'active'    => false,
         ]);
 
-        $sut = new Pager(3, 10, 300, 10, false);
+        $sut = new Pager(3, 10, 300, 10);
         $actual = json_encode($sut);
 
         $this->assertJsonStringEqualsJsonString($expected, $actual);
@@ -49,7 +48,7 @@ class PagerTest extends TestCase
     public function testGetPagedRows(array $expectedRows, $expectedJson, $page, $limit, array $rows)
     {
         $sut = new Pager();
-        $sut->setPage($page)->setLimit($limit)->setActive(true);
+        $sut->setPage($page)->setLimit($limit);
         $actualRows = $sut->getPagedRows($rows);
         $actualJson = json_encode($sut);
 
@@ -93,7 +92,6 @@ class PagerTest extends TestCase
                     'pageCount' => 10,
                     'rowCount'  => 100,
                     'limit'     => 10,
-                    'active'    => true,
                 ]),
                 3,
                 10,
@@ -117,7 +115,6 @@ class PagerTest extends TestCase
                     'pageCount' => 10,
                     'rowCount'  => 100,
                     'limit'     => 10,
-                    'active'    => true,
                 ]),
                 1,
                 10,
@@ -141,7 +138,6 @@ class PagerTest extends TestCase
                     'pageCount' => 10,
                     'rowCount'  => 100,
                     'limit'     => 10,
-                    'active'    => true,
                 ]),
                 10,
                 10,
@@ -154,7 +150,6 @@ class PagerTest extends TestCase
                     'pageCount' => 10,
                     'rowCount'  => 100,
                     'limit'     => 10,
-                    'active'    => true,
                 ]),
                 11,
                 10,
