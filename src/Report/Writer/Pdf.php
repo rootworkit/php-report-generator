@@ -12,6 +12,9 @@
 namespace Rootwork\Report\Writer;
 
 use PhpOffice\PhpSpreadsheet\IOFactory as SpreadsheetWriterFactory;
+use PhpOffice\PhpSpreadsheet\Writer\IWriter;
+use PhpOffice\PhpSpreadsheet\Writer\Pdf as PdfWriter;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 
 class Pdf extends SpreadsheetAbstract implements WriterInterface
 {
@@ -23,7 +26,9 @@ class Pdf extends SpreadsheetAbstract implements WriterInterface
      */
     public function save($name)
     {
+        /** @var IWriter|PdfWriter $writer */
         $writer = SpreadsheetWriterFactory::createWriter($this->getSpreadsheet(), 'Mpdf');
+        $writer->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
         $writer->save($name);
     }
 }
