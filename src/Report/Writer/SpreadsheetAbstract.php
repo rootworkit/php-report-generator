@@ -47,13 +47,14 @@ abstract class SpreadsheetAbstract extends WriterAbstract
                 $this->addRow($spreadsheet, $rowData);
             }
 
+            $lastCol = $spreadsheet->getActiveSheet()->getHighestColumn();
+
             if ($this->report->getDefinition()->hasTotal()) {
-                $range = "A{$this->currentRow}:Z{$this->currentRow}";
-                $spreadsheet->getActiveSheet()->getStyle($range)->getFont()->setBold(true);
                 $this->addRow($spreadsheet, $this->report->getTotals());
+                $range = 'A' . $this->currentRow . ':' . $lastCol . $this->currentRow;
+                $spreadsheet->getActiveSheet()->getStyle($range)->getFont()->setBold(true);
             }
 
-            $lastCol = $spreadsheet->getActiveSheet()->getHighestColumn();
             $spreadsheet->getActiveSheet()->getStyle("A1:{$lastCol}1")->getFont()->setBold(true);
 
             foreach (range('A', $lastCol) as $col) {
