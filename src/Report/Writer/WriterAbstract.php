@@ -13,7 +13,7 @@ namespace Rootwork\Report\Writer;
 
 use Rootwork\Report\ReportInterface;
 
-abstract class WriterAbstract
+abstract class WriterAbstract implements WriterInterface
 {
 
     /**
@@ -30,4 +30,11 @@ abstract class WriterAbstract
     {
         $this->report = $report;
     }
+
+    /**
+     * Save to file or stream.
+     *
+     * @param string $name
+     */
+    abstract public function save($name);
 }
