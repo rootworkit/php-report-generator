@@ -41,26 +41,26 @@ abstract class SpreadsheetAbstract extends WriterAbstract
                 ->setTitle($this->report->getDefinition()->getTitle())
                 ->setSubject($this->report->getDefinition()->getTitle());
 
-            $spreadsheet->getActiveSheet()->getStyle('A1:Z1')->getFont()->setBold(true);
-            $this->spreadsheet = $spreadsheet;
-
-            $this->addRow($this->report->getColumnDisplayNames());
+            $this->addRow($spreadsheet, $this->report->getColumnDisplayNames());
 
             foreach ($this->report->getAllRows() as $rowData) {
-                $this->addRow($rowData);
+                $this->addRow($spreadsheet, $rowData);
             }
 
             if ($this->report->getDefinition()->hasTotal()) {
                 $range = "A{$this->currentRow}:Z{$this->currentRow}";
                 $spreadsheet->getActiveSheet()->getStyle($range)->getFont()->setBold(true);
-                $this->addRow($this->report->getTotals());
+                $this->addRow($spreadsheet, $this->report->getTotals());
             }
 
             $lastCol = $spreadsheet->getActiveSheet()->getHighestColumn();
+            $spreadsheet->getActiveSheet()->getStyle("A1:{$lastCol}1")->getFont()->setBold(true);
 
             foreach (range('A', $lastCol) as $col) {
                 $spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
             }
+
+            $this->spreadsheet = $spreadsheet;
         }
 
         return $this->spreadsheet;
@@ -69,13 +69,14 @@ abstract class SpreadsheetAbstract extends WriterAbstract
     /**
      * Add a row of values to the current worksheet.
      *
-     * @param array $row
+     * @param Spreadsheet $spreadsheet
+     * @param array       $row
      *
      * @return $this
      */
-    protected function addRow(array $row)
+    protected function addRow(Spreadsheet $spreadsheet, array $row)
     {
-        $sheet = $this->spreadsheet->getActiveSheet();
+        $sheet = $spreadsheet->getActiveSheet();
         $col   = 'A';
 
         foreach ($row as $value) {
