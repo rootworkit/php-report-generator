@@ -331,6 +331,8 @@ class Definition implements \JsonSerializable
      */
     public function getOrder()
     {
+        // Filter out invalid columns first
+        $this->setOrder($this->order);
         return $this->order;
     }
 
