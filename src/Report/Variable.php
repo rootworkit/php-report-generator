@@ -22,6 +22,7 @@ class Variable implements \JsonSerializable
     /**
      * Type constants
      */
+    const TYPE_CHECKBOX        = 'checkbox';
     const TYPE_DATE            = 'date';
     const TYPE_NUMBER          = 'number';
     const TYPE_SELECT          = 'select';
@@ -78,14 +79,29 @@ class Variable implements \JsonSerializable
     protected $value;
 
     /**
+     * Description of the variable.
+     *
+     * @var string|null
+     */
+    protected $description = null;
+
+    /**
+     * Reserved words that cannot be used as variable names.
+     *
+     * @var array
+     */
+    protected $reserved = ['limit', 'order', 'page'];
+
+    /**
      * Variable constructor.
      *
-     * @param string     $name
-     * @param string     $display
-     * @param string     $type
-     * @param mixed|null $default
-     * @param array      $options
-     * @param string     $format
+     * @param string      $name
+     * @param string      $display
+     * @param string      $type
+     * @param mixed|null  $default
+     * @param array       $options
+     * @param string      $format
+     * @param string|null $description
      */
     public function __construct(
         $name,
@@ -93,14 +109,16 @@ class Variable implements \JsonSerializable
         $type,
         $default = null,
         array $options = [],
-        $format = null
+        $format = null,
+        $description = null
     ) {
         $this->setName($name)
             ->setDisplay($display)
             ->setType($type)
             ->setDefault($default)
             ->setOptions($options)
-            ->setFormat($format);
+            ->setFormat($format)
+            ->setDescription($description);
 
         $this->value = $this->getDefault();
     }
@@ -112,6 +130,12 @@ class Variable implements \JsonSerializable
      */
     public function setName($name)
     {
+        $reserved = array_map('strtolower', $this->reserved);
+
+        if (in_array(strtolower($name), $reserved)) {
+            throw new \InvalidArgumentException("Variable cannot be named '$name' because that is a reserved word");
+        }
+
         $this->name = $name;
         return $this;
     }
@@ -242,6 +266,29 @@ class Variable implements \JsonSerializable
     }
 
     /**
+     * Set the variable description.
+     *
+     * @param string $description
+     *
+     * @return $this
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * Get the variable description.
+     *
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Set the value.
      *
      * @param mixed $value
@@ -251,6 +298,9 @@ class Variable implements \JsonSerializable
     public function setValue($value)
     {
         switch ($this->getType()) {
+            case self::TYPE_CHECKBOX:
+                $this->value = boolval($value);
+                break;
             case self::TYPE_DATE:
                 $this->value = $this->getValidDate($value);
                 break;
@@ -328,12 +378,13 @@ class Variable implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'name'    => $this->getName(),
-            'display' => $this->getDisplay(),
-            'type'    => $this->getType(),
-            'default' => $this->getDefault(),
-            'options' => $this->getOptions(),
-            'format'  => $this->getFormat(),
+            'name'        => $this->getName(),
+            'display'     => $this->getDisplay(),
+            'type'        => $this->getType(),
+            'default'     => $this->getDefault(),
+            'options'     => $this->getOptions(),
+            'format'      => $this->getFormat(),
+            'description' => $this->getDescription(),
         ];
     }
 }

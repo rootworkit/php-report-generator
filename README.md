@@ -280,6 +280,12 @@ Result:
             "amount": "599.00"
         }
     ],
+    "paging": {
+      "totalRows": 3,
+      "limit": 10,
+      "page": 1,
+      "totalPages": 1
+    },
     "totals": [
         null,
         null,

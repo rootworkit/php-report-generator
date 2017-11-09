@@ -18,7 +18,9 @@
     "php": ">=5.4"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.3"
+    "phpunit/phpunit": "^6.3",
+    "phpoffice/phpspreadsheet": "dev-develop",
+    "mpdf/mpdf": "^7.0"
   },
   "autoload": {
     "psr-4": {
@@ -30,5 +32,9 @@
       "Rootwork\\Report\\": ["src/Report", "tests/functional/Report"],
       "Rootwork\\Test\\": "tests/functional"
     }
+  },
+  "suggest": {
+    "phpoffice/phpspreadsheet": "Allows exporting to Excel and required for CSV and PDF exports",
+    "mpdf/mpdf": "Required for exporting to PDF"
   }
 }

@@ -52,7 +52,7 @@ abstract class ReportAbstract implements \JsonSerializable
     /**
      * Run the report and return results.
      *
-     * @return array[]
+     * @return void
      */
     abstract public function run();
 
@@ -76,6 +76,21 @@ abstract class ReportAbstract implements \JsonSerializable
     public function setParameters(array $parameters = [])
     {
         $this->definition->setVariableValues($parameters);
+
+        if ($pager = $this->getDefinition()->getPager()) {
+            if (array_key_exists('page', $parameters)) {
+                $pager->setPage($parameters['page']);
+            }
+
+            if (array_key_exists('limit', $parameters)) {
+                $pager->setLimit($parameters['limit']);
+            }
+        }
+
+        if (isset($parameters['order'])) {
+            $this->getDefinition()->setOrder((array) $parameters['order']);
+        }
+
         return $this;
     }
 
@@ -90,7 +105,53 @@ abstract class ReportAbstract implements \JsonSerializable
             $this->run();
         }
 
+        if ($pager = $this->getDefinition()->getPager()) {
+            return $pager->getPagedRows($this->rows);
+        }
+
         return $this->rows;
+    }
+
+    /**
+     * Get all report rows (bypass paging).
+     *
+     * @return array
+     */
+    public function getAllRows()
+    {
+        if (empty($this->rows)) {
+            $this->run();
+        }
+
+        return $this->rows;
+    }
+
+    /**
+     * Get the resulting columns after running report.
+     *
+     * @return Column[]
+     */
+    public function getColumns()
+    {
+        if (empty($this->rows)) {
+            $this->run();
+        }
+
+        return $this->getDefinition()->getColumns();
+    }
+
+    /**
+     * Get the resulting column display names after running report.
+     *
+     * @return array
+     */
+    public function getColumnDisplayNames()
+    {
+        if (empty($this->rows)) {
+            $this->run();
+        }
+
+        return $this->getDefinition()->getColumnDisplayNames();
     }
 
     /**
@@ -100,13 +161,17 @@ abstract class ReportAbstract implements \JsonSerializable
      */
     public function getTotals()
     {
+        if (empty($this->rows)) {
+            $this->run();
+        }
+
         $totals = [];
 
-        foreach ($this->definition->getColumns() as $column) {
+        foreach ($this->getDefinition()->getColumns() as $column) {
             $value = null;
 
             if ($column->isTotal()) {
-                $value = array_sum(array_column($this->getRows(), $column->getName()));
+                $value = array_sum(array_column($this->getAllRows(), $column->getName()));
             }
 
             $totals[] = $value;
@@ -120,20 +185,12 @@ abstract class ReportAbstract implements \JsonSerializable
      */
     public function jsonSerialize()
     {
-        $columns = [];
-
-        foreach ($this->definition->getColumns() as $column) {
-            $columns[] = [
-                'name'   => $column->getDisplay(),
-                'type'   => $column->getType(),
-                'format' => $column->getFormat(),
-            ];
-        }
-
         $data = [
-            'title' => $this->definition->getTitle(),
-            'columns' => $columns,
-            'rows' => $this->getRows(),
+            'title'   => $this->getDefinition()->getTitle(),
+            'paging'  => $this->getDefinition()->getPager(),
+            'columns' => $this->getColumns(),
+            'rows'    => $this->getRows(),
+            'order'   => $this->getDefinition()->getOrder(),
         ];
 
         if ($this->getDefinition()->hasTotal()) {

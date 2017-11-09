@@ -29,7 +29,8 @@ class ReportTest extends TestCase
     {
         $sut = new FooReport();
         $sut->setParameters($parameters);
-        $actualData   = $sut->run();
+        $sut->run();
+        $actualData   = $sut->getRows();
         $actualTotals = $sut->getTotals();
 
         $this->assertEquals($expectedData, $actualData);
@@ -87,10 +88,29 @@ class ReportTest extends TestCase
     {
         $expected = json_encode([
             'title' => 'Foo Report',
+            'paging' => null,
             'columns' => [
-                ['name' => 'ID', 'type' => 'integer', 'format' => 'number'],
-                ['name' => 'Name', 'type' => 'string', 'format' => null],
-                ['name' => 'Score', 'type' => 'integer', 'format' => 'number'],
+                [
+                    'name'    => 'id',
+                    'display' => 'ID',
+                    'type'    => 'integer',
+                    'format'  => 'number',
+                    'total'   => false,
+                ],
+                [
+                    'name'    => 'name',
+                    'display' => 'Name',
+                    'type'    => 'string',
+                    'format'  => null,
+                    'total'   => false,
+                ],
+                [
+                    'name'    => 'score',
+                    'display' => 'Score',
+                    'type'    => 'integer',
+                    'format'  => 'number',
+                    'total'   => true,
+                ],
             ],
             'rows' => [
                 ['id' => 1, 'name' => 'Foo', 'score' => 1],
@@ -99,11 +119,12 @@ class ReportTest extends TestCase
                 ['id' => 4, 'name' => 'Qux', 'score' => 5],
                 ['id' => 5, 'name' => 'Gar', 'score' => 8],
             ],
+            'order' => ['name ASC'],
             'totals' => [null, null, 19],
         ]);
 
         $sut = new FooReport();
-        $sut->setParameters(['multiplier' => 1]);
+        $sut->setParameters(['multiplier' => 1, 'order' => 'name']);
         $sut->run();
         $actual = json_encode($sut);
 
@@ -131,8 +152,6 @@ class FooReport extends ReportAbstract implements ReportInterface
 
     /**
      * Run the report and return results.
-     *
-     * @return array[]
      */
     public function run()
     {
@@ -144,7 +163,5 @@ class FooReport extends ReportAbstract implements ReportInterface
             ['id' => 4, 'name' => 'Qux', 'score' => 5 * $multiplier],
             ['id' => 5, 'name' => 'Gar', 'score' => 8 * $multiplier],
         ];
-
-        return $this->rows;
     }
 }
