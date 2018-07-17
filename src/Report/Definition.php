@@ -62,6 +62,13 @@ class Definition implements \JsonSerializable
     protected $order = [];
 
     /**
+     * User Timezone.
+     *
+     * @var \DateTimeZone
+     */
+    protected $userTimeZone = null;
+
+    /**
      * Set the report title.
      *
      * @param string $title
@@ -300,6 +307,10 @@ class Definition implements \JsonSerializable
         return $this;
     }
 
+    public function setUserTimeZone(\DateTimeZone $timeZone) {
+        $this->userTimeZone = $timeZone;
+    }
+
     /**
      * Add an order column. Invalid columns are ignored.
      *
@@ -337,6 +348,16 @@ class Definition implements \JsonSerializable
     }
 
     /**
+     * Get user timezone
+     *
+     * @return \DateTimeZone|null
+     */
+    public function getUserTimeZone()
+    {
+        return $this->userTimeZone;
+    }
+
+    /**
      * Specify data which should be serialized to JSON
      *
      * @link  http://php.net/manual/en/jsonserializable.jsonserialize.php
@@ -352,6 +373,7 @@ class Definition implements \JsonSerializable
             'variables' => $this->getVariables(),
             'paging'    => $this->getPager(),
             'order'     => $this->getOrder(),
+            'userTimeZone' => $this->getUserTimeZone(),
         ];
     }
 }

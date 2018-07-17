@@ -91,6 +91,14 @@ abstract class ReportAbstract implements \JsonSerializable
             $this->getDefinition()->setOrder((array) $parameters['order']);
         }
 
+        if (isset($parameters['userTimezone'])) {
+            if ($parameters['userTimezone'][0] === 'x') {
+                $parameters['userTimezone'][0] = '+';
+            }
+            $timezone = new \DateTimeZone($parameters['userTimezone']);
+            $this->getDefinition()->setUserTimeZone($timezone);
+        }
+
         return $this;
     }
 
