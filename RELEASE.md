@@ -1,5 +1,10 @@
 # Release Notes
 
+## 1.0
+
+### 1.0.0
+* Timezone support added by @rogeiio.
+
 ## 0.1
 
 ### 0.1.0
